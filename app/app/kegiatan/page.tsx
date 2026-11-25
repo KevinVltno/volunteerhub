@@ -17,6 +17,16 @@ export default function KegiatanPage() {
   const [cats, setCats] = useState<Category[]>(interests);
   const [onlyFav, setOnlyFav] = useState(false);
 
+  const hasFilters = Boolean(q || city || when || cats.length || onlyFav);
+
+  function resetFilters() {
+    setQ("");
+    setCity("");
+    setWhen("");
+    setCats([]);
+    setOnlyFav(false);
+  }
+
   // Filter data dummy secara lokal
   const shown = useMemo(() => {
     const kw = q.trim().toLowerCase();
@@ -90,7 +100,17 @@ export default function KegiatanPage() {
         </div>
       </div>
 
-      <p className="text-sm text-slate-600" aria-live="polite">{shown.length} kegiatan ditemukan</p>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <p className="text-sm text-slate-600" aria-live="polite">{shown.length} kegiatan ditemukan</p>
+        <button
+          type="button"
+          onClick={resetFilters}
+          disabled={!hasFilters}
+          className="min-h-11 rounded-xl border border-brand-200 px-4 text-sm font-semibold text-brand-800 hover:bg-brand-50 disabled:opacity-50"
+        >
+          Reset filter
+        </button>
+      </div>
 
       {shown.length === 0 ? (
         <EmptyState title="Tidak ada kegiatan yang cocok" desc="Coba ubah kata kunci, kota, atau hapus beberapa filter." />
