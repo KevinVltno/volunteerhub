@@ -3,13 +3,14 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { BarChart3, ClipboardList, Home, Loader2, LogOut, Search } from "lucide-react";
+import { BarChart3, ClipboardList, Heart, Home, Loader2, LogOut, Search } from "lucide-react";
 import Logo from "@/components/Logo";
 import { useApp } from "@/lib/store";
 
 const nav = [
   { href: "/app", label: "Beranda", icon: Home },
   { href: "/app/kegiatan", label: "Kegiatan", icon: Search },
+  { href: "/app/favorit", label: "Favorit", icon: Heart },
   { href: "/app/aktivitas", label: "Aktivitas", icon: ClipboardList },
   { href: "/app/dampak", label: "Dampak", icon: BarChart3 },
 ];
@@ -31,7 +32,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     );
   }
 
-  const active = (href: string) => (href === "/app" ? pathname === href : pathname.startsWith(href));
+  const active = (href: string) => pathname === href || (href !== "/app" && pathname.startsWith(href + "/"));
 
   return (
     <div className="min-h-screen bg-brand-50/40 lg:pl-64 print:bg-white print:pl-0">
@@ -73,7 +74,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
         {children}
       </main>
 
-      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t border-brand-100 bg-white lg:hidden print:hidden" aria-label="Navigasi bawah">
+      <nav className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-brand-100 bg-white lg:hidden print:hidden" aria-label="Navigasi bawah">
         {nav.map((n) => (
           <Link
             key={n.href} href={n.href} aria-current={active(n.href) ? "page" : undefined}

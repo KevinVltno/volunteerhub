@@ -9,13 +9,14 @@ import type { Activity } from "@/lib/data";
 export default function ActivityCard({ a }: { a: Activity }) {
   const { favorites, toggleFavorite } = useApp();
   const fav = favorites.includes(a.id);
-  const pct = Math.round((a.filled / a.quota) * 100);
+  const spotsLeft = Math.max(0, a.quota - a.filled);
+  const pct = a.quota > 0 ? Math.min(100, Math.round((a.filled / a.quota) * 100)) : 100;
 
   return (
-    <article className="relative overflow-hidden rounded-2xl border border-brand-100 bg-white transition hover:shadow-lg">
-      <Link href={`/app/kegiatan/${a.id}`} className="block">
-        <Photo src={a.image} alt={`Dokumentasi kegiatan ${a.title}`} className="h-44 w-full" />
-        <div className="space-y-3 p-4">
+    <article className="relative rounded-2xl border border-brand-100 bg-white transition hover:shadow-lg">
+      <Link href={`/app/kegiatan/${a.id}`} className="flex h-full flex-col overflow-hidden rounded-2xl">
+        <Photo src={a.image} alt={`Dokumentasi kegiatan ${a.title}`} className="h-44 w-full shrink-0" />
+        <div className="flex flex-1 flex-col items-start gap-3 p-4">
           <span className="inline-block rounded-full bg-brand-50 px-2.5 py-1 text-xs font-semibold text-brand-700">
             {a.category}
           </span>
@@ -28,15 +29,21 @@ export default function ActivityCard({ a }: { a: Activity }) {
             <li className="flex items-center gap-2"><CalendarDays className="size-4 text-brand-600" aria-hidden />{a.dateLabel} · {a.time}</li>
             <li className="flex items-center gap-2"><Users className="size-4 text-brand-600" aria-hidden />{a.filled}/{a.quota} relawan</li>
           </ul>
-          <div className="h-2 overflow-hidden rounded-full bg-brand-50" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="Kuota terisi">
-            <div className="h-full rounded-full bg-brand-600" style={{ width: `${pct}%` }} />
+          <div className="mt-auto w-full space-y-2 border-t border-brand-100 pt-3">
+            <p className={spotsLeft === 0 ? "text-sm font-semibold text-slate-700" : "text-sm font-semibold text-brand-800"}>
+              {spotsLeft === 0 ? "Kuota penuh" : "Sisa " + spotsLeft + " tempat"}
+            </p>
+            <div className="h-2 overflow-hidden rounded-full bg-brand-100" aria-hidden="true">
+              <div className="h-full rounded-full bg-brand-600" style={{ width: pct + "%" }} />
+            </div>
           </div>
         </div>
       </Link>
       <button
+        type="button"
         onClick={() => toggleFavorite(a.id)}
         aria-pressed={fav}
-        aria-label={fav ? "Hapus dari favorit" : "Simpan ke favorit"}
+        aria-label={"Favorit: " + a.title}
         className="absolute right-3 top-3 grid size-11 place-items-center rounded-full bg-white/95 text-brand-700 shadow"
       >
         <Heart className={`size-5 ${fav ? "fill-brand-600" : ""}`} aria-hidden />

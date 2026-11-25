@@ -39,7 +39,7 @@ export default function KegiatanPage() {
     );
   }, [all, q, city, when, cats, onlyFav, favorites]);
 
-  const field = "mt-1 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 text-sm focus:border-brand-600";
+  const field = "min-h-11 w-full rounded-xl border border-slate-300 bg-white text-sm focus:border-brand-600";
 
   return (
     <div className="space-y-6">
@@ -52,21 +52,21 @@ export default function KegiatanPage() {
         <div className="grid gap-3 md:grid-cols-3">
           <div>
             <label htmlFor="q" className="text-sm font-semibold text-slate-800">Cari</label>
-            <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-[1.15rem] size-4 text-slate-400" aria-hidden />
-              <input id="q" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Nama kegiatan atau penyelenggara" className={`${field} pl-9`} />
+            <div className="relative mt-1">
+              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400" aria-hidden />
+              <input id="q" type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Nama kegiatan atau penyelenggara" className={`${field} ps-9 pe-3`} />
             </div>
           </div>
           <div>
             <label htmlFor="city" className="text-sm font-semibold text-slate-800">Lokasi</label>
-            <select id="city" value={city} onChange={(e) => setCity(e.target.value)} className={field}>
+            <select id="city" value={city} onChange={(e) => setCity(e.target.value)} className={field + " mt-1 px-3"}>
               <option value="">Semua kota</option>
               {cities.map((c) => <option key={c}>{c}</option>)}
             </select>
           </div>
           <div>
             <label htmlFor="when" className="text-sm font-semibold text-slate-800">Waktu</label>
-            <select id="when" value={when} onChange={(e) => setWhen(e.target.value)} className={field}>
+            <select id="when" value={when} onChange={(e) => setWhen(e.target.value)} className={field + " mt-1 px-3"}>
               <option value="">Kapan saja</option>
               <option value="weekend">Akhir pekan</option>
               <option value="weekday">Hari kerja</option>
